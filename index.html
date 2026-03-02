@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cute Kitten - 个人小说站</title>
+
+  <!-- Umami 统计（替换成你自己的 umami 站点 ID） -->
+  <script async src="https://analytics.umami.is/script.js" data-website-id="替换成你的umami-website-id"></script>
+
   <style>
     :root {
       --primary: #ff79c6;
@@ -12,135 +16,86 @@
       --card: #1a1a2e;
       --text: #e0e0ff;
       --text-light: #a0a0cc;
+      --border: #333366;
     }
 
-    * { margin:0; padding:0; box-sizing:border-box; }
+    [data-theme="dark"] {
+      --bg: #0a0a14;
+      --card: #111122;
+      --text: #e0e0ff;
+      --text-light: #a0a0cc;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #212529;
+      --text-light: #6c757d;
+      --border: #dee2e6;
+    }
+
     body {
       font-family: system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
     }
-    a { color: var(--primary); text-decoration: none; }
-    a:hover { color: #ffaff0; text-decoration: underline; }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
     header {
-      background: linear-gradient(to bottom, #1e0033, #0f001a);
+      background: linear-gradient(to bottom, var(--primary-dark), var(--bg));
       padding: 2.5rem 0 1.5rem;
       text-align: center;
-      border-bottom: 1px solid #333366;
+      border-bottom: 1px solid var(--border);
     }
 
-    .logo {
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      border: 4px solid var(--primary);
-      object-fit: cover;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 30px rgba(255,121,198,0.4);
-    }
+    .logo { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--primary); object-fit: cover; margin-bottom: 1rem; box-shadow: 0 0 30px rgba(255,121,198,0.4); }
 
-    h1 { font-size: 2.8rem; margin-bottom: 0.5rem; color: white; }
-    .tagline { font-size: 1.2rem; color: var(--text-light); margin-bottom: 1.5rem; }
+    h1 { font-size: 2.8rem; margin-bottom: 0.5rem; color: var(--text); }
 
-    .follow-btn {
-      display: inline-block;
+    .top-actions { margin: 1.5rem 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    .follow-btn, .theme-toggle, .share-btn {
       background: var(--primary);
       color: white;
       font-weight: bold;
-      padding: 0.8rem 1.8rem;
+      padding: 0.8rem 1.6rem;
       border-radius: 999px;
-      margin: 0.5rem;
+      border: none;
+      cursor: pointer;
       transition: all 0.25s;
-      font-size: 1.1rem;
     }
-    .follow-btn:hover {
+
+    .follow-btn:hover, .theme-toggle:hover, .share-btn:hover {
       background: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255,121,198,0.35);
     }
 
-    .top-actions { margin: 1.5rem 0; }
+    .search-container { margin: 2rem 0; text-align: center; }
+    #searchInput { width: 100%; max-width: 500px; padding: 0.8rem; font-size: 1.1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); }
 
-    main { padding: 3rem 0; }
-    h2 { color: var(--primary); margin: 2.5rem 0 1.5rem; font-size: 2.1rem; text-align: center; }
+    .filter-tags { margin: 1rem 0; text-align: center; }
+    .tag-btn { margin: 0.3rem; padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--primary); background: transparent; color: var(--primary); cursor: pointer; }
+    .tag-btn.active { background: var(--primary); color: white; }
 
-    .works-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.8rem;
-      margin-bottom: 4rem;
-    }
+    .works-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.8rem; margin-bottom: 4rem; }
 
-    .card {
-      background: var(--card);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid #333366;
-      transition: all 0.3s;
-      position: relative;
-    }
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-      border-color: var(--primary);
-    }
+    .card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); transition: all 0.3s; }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.3); border-color: var(--primary); }
 
-    .cover-container {
-      height: 180px;
-      background: linear-gradient(135deg, #ff79c6, #a06cd5);
-      position: relative;
-    }
-    .cover-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .upload-cover-btn {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
+    .cover-container { height: 180px; background: linear-gradient(135deg, var(--primary), #a06cd5); position: relative; }
+    .cover-img { width: 100%; height: 100%; object-fit: cover; }
+    .upload-cover-btn { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 
     .card-body { padding: 1.5rem; }
-    .card h3 { font-size: 1.4rem; margin-bottom: 0.6rem; }
+    .card h3 { font-size: 1.4rem; margin-bottom: 0.6rem; color: var(--text); }
     .description { color: var(--text-light); font-size: 0.98rem; margin-bottom: 1rem; min-height: 3.5em; }
-    .desc-edit-area {
-      width: 100%;
-      min-height: 80px;
-      padding: 8px;
-      background: #0d0d1f;
-      color: white;
-      border: 1px solid var(--primary);
-      border-radius: 6px;
-      resize: vertical;
-      font-size: 0.95rem;
-    }
 
-    .card-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 1rem;
-    }
-    .btn {
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-    }
+    .card-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 1rem; }
+    .btn { padding: 0.5rem 1rem; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; transition: all 0.2s; }
     .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-dark); }
     .btn-secondary { background: #444466; color: white; }
@@ -148,69 +103,65 @@
     .btn-share { background: #1d9bf0; color: white; }
     .btn-share:hover { background: #0c84d6; }
 
-    .donate-section {
-      background: rgba(255,121,198,0.08);
-      border: 1px solid rgba(255,121,198,0.2);
-      border-radius: 16px;
-      padding: 2.5rem;
-      text-align: center;
-      max-width: 700px;
-      margin: 4rem auto;
-    }
-    .wallet-address {
-      background: #0d0d1f;
-      padding: 1rem;
-      border-radius: 10px;
-      font-family: monospace;
-      word-break: break-all;
-      margin: 1.5rem 0;
-      position: relative;
-    }
-    .copy-btn {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+    .donate-section { background: rgba(255,121,198,0.08); border: 1px solid rgba(255,121,198,0.2); border-radius: 16px; padding: 2.5rem; text-align: center; max-width: 700px; margin: 4rem auto; }
 
-    footer {
-      background: #0a0a14;
-      padding: 3rem 0 2rem;
-      text-align: center;
-      border-top: 1px solid #222244;
-      margin-top: 5rem;
-    }
+    footer { background: var(--card); padding: 3rem 0 2rem; text-align: center; border-top: 1px solid var(--border); margin-top: 5rem; }
 
-    input[type="file"] { display: none; }
+    .giscus { margin: 4rem auto; max-width: 900px; padding: 0 20px; }
   </style>
+
+  <!-- Giscus 评论脚本 -->
+  <script src="https://giscus.app/client.js"
+    data-repo="youmia-cmy/youmia-cmy"  <!-- 替换成你的 GitHub 仓库名 -->
+    data-repo-id="替换成你的仓库 ID"   <!-- 在 https://giscus.app 生成时会给出 -->
+    data-category="Announcements"
+    data-category-id="替换成分类 ID"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async>
+  </script>
 </head>
 <body>
 
 <header>
   <div class="container">
-    <img src="https://pbs.twimg.com/profile_images/你的头像ID/文件名.jpg" alt="Cute Kitten" class="logo">
+    <img src="你的头像链接" alt="Cute Kitten" class="logo">
     <h1>Cute Kitten</h1>
     <p class="tagline">喵喵的小说角落 ✧*｡٩(ˊᗜˋ*)و✧</p>
 
     <div class="top-actions">
       <a href="https://x.com/_StarryMiu" target="_blank" class="follow-btn">★ 关注我 @_StarryMiu</a>
+      <button class="theme-toggle" onclick="toggleTheme()">🌙 夜间模式</button>
+      <button class="share-btn" onclick="shareSite()">分享网站</button>
     </div>
   </div>
 </header>
 
 <main class="container">
 
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="搜索小说标题或简介...">
+  </div>
+
+  <div class="filter-tags" id="tagFilters">
+    <button class="tag-btn active" data-tag="all">全部</button>
+    <button class="tag-btn" data-tag="言情">言情</button>
+    <button class="tag-btn" data-tag="玄幻">玄幻</button>
+    <button class="tag-btn" data-tag="日常">日常</button>
+    <button class="tag-btn" data-tag="悬疑">悬疑</button>
+  </div>
+
   <h2>我的作品</h2>
   <div class="works-grid" id="worksGrid">
 
     <!-- 示例作品1 -->
-    <div class="card" data-id="1">
+    <div class="card" data-id="1" data-tags="言情,日常">
       <div class="cover-container">
         <img class="cover-img" src="" alt="封面" style="display:none;">
         <button class="upload-cover-btn" onclick="document.getElementById('cover-upload-1').click()">上传封面</button>
@@ -219,19 +170,18 @@
       <div class="card-body">
         <h3>星海与猫的秘密契约</h3>
         <div class="description" id="desc-1">在无数个失眠的夜晚，她与来自银河尽头的猫签订了一份无法反悔的契约……</div>
-        <textarea class="desc-edit-area" id="edit-1" style="display:none;"></textarea>
-        
+        <div class="progress">阅读进度：第 <span class="progress-num">0</span> 章</div>
         <div class="card-actions">
           <button class="btn btn-secondary" onclick="toggleEdit(1)">编辑简介</button>
           <button class="btn btn-primary" onclick="saveEdit(1)">确认</button>
-          <a href="https://你的小说链接1" target="_blank" class="btn btn-primary">开始阅读</a>
-          <button class="btn btn-share" onclick="shareWork('星海与猫的秘密契约')">分享</button>
+          <a href="你的小说链接1" target="_blank" class="btn btn-primary">开始阅读</a>
+          <button class="btn btn-share" onclick="shareWork('星海与猫的秘密契约', '你的小说链接1')">分享</button>
         </div>
       </div>
     </div>
 
-    <!-- 示例作品2 - 你可以复制上面结构添加更多 -->
-    <div class="card" data-id="2">
+    <!-- 示例作品2 -->
+    <div class="card" data-id="2" data-tags="玄幻">
       <div class="cover-container">
         <img class="cover-img" src="" alt="封面" style="display:none;">
         <button class="upload-cover-btn" onclick="document.getElementById('cover-upload-2').click()">上传封面</button>
@@ -240,29 +190,32 @@
       <div class="card-body">
         <h3>粉色月光下的告解室</h3>
         <div class="description" id="desc-2">每当月亮变成粉色，就会有一扇隐秘的告解室出现在旧书店的三楼……</div>
-        <textarea class="desc-edit-area" id="edit-2" style="display:none;"></textarea>
-        
+        <div class="progress">阅读进度：第 <span class="progress-num">0</span> 章</div>
         <div class="card-actions">
           <button class="btn btn-secondary" onclick="toggleEdit(2)">编辑简介</button>
           <button class="btn btn-primary" onclick="saveEdit(2)">确认</button>
           <a href="#" class="btn btn-primary">开始阅读</a>
-          <button class="btn btn-share" onclick="shareWork('粉色月光下的告解室')">分享</button>
+          <button class="btn btn-share" onclick="shareWork('粉色月光下的告解室', '#')">分享</button>
         </div>
       </div>
     </div>
 
+    <!-- 你可以继续添加更多作品卡片 -->
+
   </div>
+
+  <!-- Giscus 评论区 -->
+  <div class="giscus"></div>
 
   <div class="donate-section">
     <h2>喜欢的话可以打赏支持喵～💕</h2>
     <p>你的每一份支持都是我继续写下去的动力！</p>
     <div class="wallet-address" id="wallet">
       0x754104292463f0a14ae23c79b2d3395d3398cccc
-      <button class="copy-btn" onclick="copyWallet()">复制</button>
+      <button class="copy-btn" onclick="copyWallet()">复制 ETH</button>
     </div>
-    <p style="font-size:0.95rem; color:var(--text-light);">
-      （ERC-20 / ETH 主网 / Polygon 等兼容链均可）
-    </p>
+    <!-- 可以加微信/支付宝二维码图片 -->
+    <!-- <img src="你的微信收款码.jpg" alt="微信打赏" style="max-width:200px; margin:1rem;"> -->
   </div>
 
 </main>
@@ -270,62 +223,145 @@
 <footer>
   <div class="container">
     <p style="margin-bottom:1.5rem;">用爱发电的小说站 💗 感谢每一位读者的陪伴</p>
-    <a href="https://x.com/_StarryMiu" target="_blank" class="follow-btn">
-      ♡ 关注 @_StarryMiu 获取最新更新
-    </a>
-    <p style="margin-top:2.5rem; font-size:0.9rem; color:#666688;">
+    <a href="https://x.com/_StarryMiu" target="_blank" class="follow-btn">♡ 关注 @_StarryMiu 获取最新更新</a>
+    <p style="margin-top:2.5rem; font-size:0.9rem; color:var(--text-light);">
       © 2026 Cute Kitten | Powered by love & insomnia
     </p>
   </div>
 </footer>
 
 <script>
-  // 复制钱包
-  function copyWallet() {
-    const addr = "0x754104292463f0a14ae23c79b2d3395d3398cccc";
-    navigator.clipboard.writeText(addr).then(() => {
-      alert("钱包地址已复制！感谢你的支持喵～ฅ^•ﻌ•^ฅ");
-    }).catch(() => alert("复制失败，可手动复制哦~"));
+  // 1. 主题切换
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    document.querySelector('.theme-toggle').textContent = next === 'dark' ? '☀️ 浅色模式' : '🌙 夜间模式';
   }
 
-  // 预览封面
+  // 初始化主题
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ 浅色模式' : '🌙 夜间模式';
+
+  // 2. 搜索功能
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    document.querySelectorAll('.card').forEach(card => {
+      const title = card.querySelector('h3').textContent.toLowerCase();
+      const desc = card.querySelector('.description').textContent.toLowerCase();
+      card.style.display = (title.includes(query) || desc.includes(query)) ? 'block' : 'none';
+    });
+  });
+
+  // 3. 标签过滤
+  document.querySelectorAll('.tag-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tag = btn.dataset.tag;
+      document.querySelectorAll('.card').forEach(card => {
+        if (tag === 'all' || card.dataset.tags.split(',').includes(tag)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // 4. 阅读进度保存
+  function updateProgress(id, chapter) {
+    localStorage.setItem(`progress-${id}`, chapter);
+    document.querySelector(`#card-${id} .progress-num`).textContent = chapter;
+  }
+
+  // 初始化进度
+  document.querySelectorAll('.card').forEach(card => {
+    const id = card.dataset.id;
+    const saved = localStorage.getItem(`progress-${id}`) || 0;
+    card.querySelector('.progress-num').textContent = saved;
+    // 示例：你可以加一个 input 来手动更新进度
+    // card.querySelector('.progress').innerHTML += `<input type="number" min="0" value="${saved}" onchange="updateProgress(${id}, this.value)"> 章`;
+  });
+
+  // 5. 分享网站
+  function shareSite() {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Cute Kitten - 个人小说站',
+        text: '超可爱的原创小说角落～来喵～',
+        url: window.location.href
+      });
+    } else {
+      alert('复制链接分享吧：' + window.location.href);
+    }
+  }
+
+  // 分享单篇作品
+  function shareWork(title, url) {
+    const text = `推荐一本超可爱的小说：《${title}》 by @_StarryMiu`;
+    if (navigator.share) {
+      navigator.share({ title, text, url: url || window.location.href });
+    } else {
+      window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url || window.location.href)}`);
+    }
+  }
+
+  // 其他原有函数保持不变（复制钱包、预览封面、编辑简介等）
+  function copyWallet() {
+    navigator.clipboard.writeText("0x754104292463f0a14ae23c79b2d3395d3398cccc").then(() => {
+      alert("钱包地址已复制！感谢你的支持喵～ฅ^•ﻌ•^ฅ");
+    });
+  }
+
   function previewCover(input, card) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = e => {
         const img = card.querySelector('.cover-img');
         img.src = e.target.result;
         img.style.display = 'block';
-      }
+      };
       reader.readAsDataURL(input.files[0]);
     }
   }
 
-  // 切换编辑模式
   function toggleEdit(id) {
-    const desc = document.getElementById('desc-' + id);
-    const textarea = document.getElementById('edit-' + id);
+    const desc = document.getElementById(`desc-${id}`);
+    const textarea = document.getElementById(`edit-${id}`) || document.createElement('textarea');
+    if (!textarea.id) {
+      textarea.id = `edit-${id}`;
+      textarea.className = 'desc-edit-area';
+      textarea.style.display = 'none';
+      desc.parentNode.insertBefore(textarea, desc.nextSibling);
+    }
     textarea.value = desc.innerText.trim();
     desc.style.display = 'none';
     textarea.style.display = 'block';
   }
 
-  // 保存简介
   function saveEdit(id) {
-    const desc = document.getElementById('desc-' + id);
-    const textarea = document.getElementById('edit-' + id);
-    desc.innerText = textarea.value.trim() || "（暂无简介）";
-    desc.style.display = 'block';
-    textarea.style.display = 'none';
+    const desc = document.getElementById(`desc-${id}`);
+    const textarea = document.getElementById(`edit-${id}`);
+    if (textarea) {
+      desc.innerText = textarea.value.trim() || "（暂无简介）";
+      desc.style.display = 'block';
+      textarea.style.display = 'none';
+      localStorage.setItem(`desc-${id}`, desc.innerText);
+    }
   }
 
-  // 分享作品到 X
-  function shareWork(title) {
-    const text = `推荐一本超可爱的小说：《${title}》 by @_StarryMiu`;
-    const url = encodeURIComponent(window.location.href);
-    const shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}&hashtags=小说,原创小说,CuteKitten`;
-    window.open(shareUrl, '_blank', 'width=600,height=400');
-  }
+  // 初始化保存的简介
+  document.querySelectorAll('.card').forEach(card => {
+    const id = card.dataset.id;
+    const savedDesc = localStorage.getItem(`desc-${id}`);
+    if (savedDesc) {
+      card.querySelector('.description').innerText = savedDesc;
+    }
+  });
 </script>
 
 </body>
