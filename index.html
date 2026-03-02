@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cute Kitten - 个人小说站</title>
+  <style>
+    :root {
+      --primary: #ff79c6;
+      --primary-dark: #e05a9e;
+      --bg: #0f0f1a;
+      --card: #1a1a2e;
+      --text: #e0e0ff;
+      --text-light: #a0a0cc;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { color: #ffaff0; text-decoration: underline; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    header {
+      background: linear-gradient(to bottom, #1e0033, #0f001a);
+      padding: 2.5rem 0 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid #333366;
+    }
+
+    .logo {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 4px solid var(--primary);
+      object-fit: cover;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 30px rgba(255,121,198,0.4);
+    }
+
+    h1 { font-size: 2.8rem; margin-bottom: 0.5rem; color: white; }
+    .tagline { font-size: 1.2rem; color: var(--text-light); margin-bottom: 1.5rem; }
+
+    .follow-btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      padding: 0.8rem 1.8rem;
+      border-radius: 999px;
+      margin: 0.5rem;
+      transition: all 0.25s;
+      font-size: 1.1rem;
+    }
+    .follow-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255,121,198,0.35);
+    }
+
+    .top-actions { margin: 1.5rem 0; }
+
+    main { padding: 3rem 0; }
+    h2 { color: var(--primary); margin: 2.5rem 0 1.5rem; font-size: 2.1rem; text-align: center; }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #333366;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      border-color: var(--primary);
+    }
+
+    .cover-container {
+      height: 180px;
+      background: linear-gradient(135deg, #ff79c6, #a06cd5);
+      position: relative;
+    }
+    .cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .upload-cover-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .card-body { padding: 1.5rem; }
+    .card h3 { font-size: 1.4rem; margin-bottom: 0.6rem; }
+    .description { color: var(--text-light); font-size: 0.98rem; margin-bottom: 1rem; min-height: 3.5em; }
+    .desc-edit-area {
+      width: 100%;
+      min-height: 80px;
+      padding: 8px;
+      background: #0d0d1f;
+      color: white;
+      border: 1px solid var(--primary);
+      border-radius: 6px;
+      resize: vertical;
+      font-size: 0.95rem;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: #444466; color: white; }
+    .btn-secondary:hover { background: #555577; }
+    .btn-share { background: #1d9bf0; color: white; }
+    .btn-share:hover { background: #0c84d6; }
+
+    .donate-section {
+      background: rgba(255,121,198,0.08);
+      border: 1px solid rgba(255,121,198,0.2);
+      border-radius: 16px;
+      padding: 2.5rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 4rem auto;
+    }
+    .wallet-address {
+      background: #0d0d1f;
+      padding: 1rem;
+      border-radius: 10px;
+      font-family: monospace;
+      word-break: break-all;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    footer {
+      background: #0a0a14;
+      padding: 3rem 0 2rem;
+      text-align: center;
+      border-top: 1px solid #222244;
+      margin-top: 5rem;
+    }
+
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <img src="https://pbs.twimg.com/profile_images/你的头像ID/文件名.jpg" alt="Cute Kitten" class="logo">
+    <h1>Cute Kitten</h1>
+    <p class="tagline">喵喵的小说角落 ✧*｡٩(ˊᗜˋ*)و✧</p>
+
+    <div class="top-actions">
+      <a href="https://x.com/_StarryMiu" target="_blank" class="follow-btn">★ 关注我 @_StarryMiu</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <h2>我的作品</h2>
+  <div class="works-grid" id="worksGrid">
+
+    <!-- 示例作品1 -->
+    <div class="card" data-id="1">
+      <div class="cover-container">
+        <img class="cover-img" src="" alt="封面" style="display:none;">
+        <button class="upload-cover-btn" onclick="document.getElementById('cover-upload-1').click()">上传封面</button>
+        <input type="file" id="cover-upload-1" accept="image/*" onchange="previewCover(this, this.closest('.card'))">
+      </div>
+      <div class="card-body">
+        <h3>星海与猫的秘密契约</h3>
+        <div class="description" id="desc-1">在无数个失眠的夜晚，她与来自银河尽头的猫签订了一份无法反悔的契约……</div>
+        <textarea class="desc-edit-area" id="edit-1" style="display:none;"></textarea>
+        
+        <div class="card-actions">
+          <button class="btn btn-secondary" onclick="toggleEdit(1)">编辑简介</button>
+          <button class="btn btn-primary" onclick="saveEdit(1)">确认</button>
+          <a href="https://你的小说链接1" target="_blank" class="btn btn-primary">开始阅读</a>
+          <button class="btn btn-share" onclick="shareWork('星海与猫的秘密契约')">分享</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 示例作品2 - 你可以复制上面结构添加更多 -->
+    <div class="card" data-id="2">
+      <div class="cover-container">
+        <img class="cover-img" src="" alt="封面" style="display:none;">
+        <button class="upload-cover-btn" onclick="document.getElementById('cover-upload-2').click()">上传封面</button>
+        <input type="file" id="cover-upload-2" accept="image/*" onchange="previewCover(this, this.closest('.card'))">
+      </div>
+      <div class="card-body">
+        <h3>粉色月光下的告解室</h3>
+        <div class="description" id="desc-2">每当月亮变成粉色，就会有一扇隐秘的告解室出现在旧书店的三楼……</div>
+        <textarea class="desc-edit-area" id="edit-2" style="display:none;"></textarea>
+        
+        <div class="card-actions">
+          <button class="btn btn-secondary" onclick="toggleEdit(2)">编辑简介</button>
+          <button class="btn btn-primary" onclick="saveEdit(2)">确认</button>
+          <a href="#" class="btn btn-primary">开始阅读</a>
+          <button class="btn btn-share" onclick="shareWork('粉色月光下的告解室')">分享</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="donate-section">
+    <h2>喜欢的话可以打赏支持喵～💕</h2>
+    <p>你的每一份支持都是我继续写下去的动力！</p>
+    <div class="wallet-address" id="wallet">
+      0x754104292463f0a14ae23c79b2d3395d3398cccc
+      <button class="copy-btn" onclick="copyWallet()">复制</button>
+    </div>
+    <p style="font-size:0.95rem; color:var(--text-light);">
+      （ERC-20 / ETH 主网 / Polygon 等兼容链均可）
+    </p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p style="margin-bottom:1.5rem;">用爱发电的小说站 💗 感谢每一位读者的陪伴</p>
+    <a href="https://x.com/_StarryMiu" target="_blank" class="follow-btn">
+      ♡ 关注 @_StarryMiu 获取最新更新
+    </a>
+    <p style="margin-top:2.5rem; font-size:0.9rem; color:#666688;">
+      © 2026 Cute Kitten | Powered by love & insomnia
+    </p>
+  </div>
+</footer>
+
+<script>
+  // 复制钱包
+  function copyWallet() {
+    const addr = "0x754104292463f0a14ae23c79b2d3395d3398cccc";
+    navigator.clipboard.writeText(addr).then(() => {
+      alert("钱包地址已复制！感谢你的支持喵～ฅ^•ﻌ•^ฅ");
+    }).catch(() => alert("复制失败，可手动复制哦~"));
+  }
+
+  // 预览封面
+  function previewCover(input, card) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = card.querySelector('.cover-img');
+        img.src = e.target.result;
+        img.style.display = 'block';
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // 切换编辑模式
+  function toggleEdit(id) {
+    const desc = document.getElementById('desc-' + id);
+    const textarea = document.getElementById('edit-' + id);
+    textarea.value = desc.innerText.trim();
+    desc.style.display = 'none';
+    textarea.style.display = 'block';
+  }
+
+  // 保存简介
+  function saveEdit(id) {
+    const desc = document.getElementById('desc-' + id);
+    const textarea = document.getElementById('edit-' + id);
+    desc.innerText = textarea.value.trim() || "（暂无简介）";
+    desc.style.display = 'block';
+    textarea.style.display = 'none';
+  }
+
+  // 分享作品到 X
+  function shareWork(title) {
+    const text = `推荐一本超可爱的小说：《${title}》 by @_StarryMiu`;
+    const url = encodeURIComponent(window.location.href);
+    const shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}&hashtags=小说,原创小说,CuteKitten`;
+    window.open(shareUrl, '_blank', 'width=600,height=400');
+  }
+</script>
+
+</body>
+</html>
